@@ -1,8 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import CardList from './CardList';
+import SearchBox from './SearchBox';
+import { robots } from './robots';
+// import logo from './logo.svg';
+// import './App.css';
 
-function App() {
+/*function App() {
   return (
     <div className="App">
       <header className="App-header">
@@ -21,6 +24,16 @@ function App() {
       </header>
     </div>
   );
+}*/
+
+const App = () => {
+    return (
+        <div>
+            <h1>RoboFriends</h1>
+            <SearchBox />
+            <CardList robots={robots} />
+        </div>
+    );
 }
 
 export default App;
