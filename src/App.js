@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import CardList from './CardList';
 import SearchBox from './SearchBox';
 import { robots } from './robots';
@@ -26,14 +26,36 @@ import { robots } from './robots';
   );
 }*/
 
-const App = () => {
-    return (
-        <div>
-            <h1>RoboFriends</h1>
-            <SearchBox />
-            <CardList robots={robots} />
-        </div>
-    );
+// vagy class App extends React.Component, ha nem importoljuk a { Component }-et.
+class App extends Component {
+    constructor() {
+        super();
+        this.state = {
+            robots: robots,
+            searchfield: ''
+        }
+    }
+
+    onSearchChange = (event) => {
+        this.setState({ searchfield: event.target.value });        
+    }
+
+    render() {
+        const filteredRobots = this.state.robots.filter(robot => {
+            return robot.name.toLowerCase().includes(
+                this.state.searchfield.toLowerCase()
+            );
+        });
+        console.log(filteredRobots);
+        
+        return (
+            <div className='tc'>
+                <h1>RoboFriends</h1>
+                <SearchBox searchChange={this.onSearchChange} />
+                <CardList robots={filteredRobots} />
+            </div>
+        );
+    }    
 }
 
 export default App;
