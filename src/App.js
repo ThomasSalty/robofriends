@@ -1,9 +1,59 @@
 import React, { Component } from 'react';
-import CardList from './CardList';
 import SearchBox from './SearchBox';
-import { robots } from './robots';
+import CardList from './CardList';
+// import { robots } from './robots';
 // import logo from './logo.svg';
-// import './App.css';
+import './App.css';
+
+
+// vagy class App extends React.Component, ha nem importoljuk a { Component }-et.
+class App extends Component {
+    constructor() {
+        super();
+        this.state = {
+            robots: [],
+            searchfield: ''
+        }
+        // console.log('constructor');
+    }
+
+    componentDidMount() {
+        // console.log('check');
+        // console.log('componentDidMount');
+        fetch('https://jsonplaceholder.typicode.com/users')
+            .then( response => response.json() )
+            .then( users => this.setState({ robots: users }) );
+    }
+
+    onSearchChange = (event) => {
+        this.setState({ searchfield: event.target.value });        
+    }
+
+    render() {
+        const filteredRobots = this.state.robots.filter(robot => {
+            return robot.name.toLowerCase().includes(
+                this.state.searchfield.toLowerCase()
+            );
+        });
+        //console.log(filteredRobots);
+        // console.log('render');
+        
+        if (this.state.robots.length === 0) {
+            return <h1>Loading...</h1>
+        } else {
+            return (
+                <div className='tc'>
+                    <h1 className='f1'>RoboFriends</h1>
+                    <SearchBox searchChange={this.onSearchChange} />
+                    <CardList robots={filteredRobots} />
+                </div>
+            );
+        }
+    }    
+}
+
+export default App;
+
 
 /*function App() {
   return (
@@ -25,37 +75,3 @@ import { robots } from './robots';
     </div>
   );
 }*/
-
-// vagy class App extends React.Component, ha nem importoljuk a { Component }-et.
-class App extends Component {
-    constructor() {
-        super();
-        this.state = {
-            robots: robots,
-            searchfield: ''
-        }
-    }
-
-    onSearchChange = (event) => {
-        this.setState({ searchfield: event.target.value });        
-    }
-
-    render() {
-        const filteredRobots = this.state.robots.filter(robot => {
-            return robot.name.toLowerCase().includes(
-                this.state.searchfield.toLowerCase()
-            );
-        });
-        console.log(filteredRobots);
-        
-        return (
-            <div className='tc'>
-                <h1>RoboFriends</h1>
-                <SearchBox searchChange={this.onSearchChange} />
-                <CardList robots={filteredRobots} />
-            </div>
-        );
-    }    
-}
-
-export default App;
